@@ -1,0 +1,6 @@
+emailOrMobile,password,expectedResult
+soniyasalunkhe2003@gmail.com,Soniya@06,SUCCESS
+9136229910,Soniya@06,SUCCESS
+soniyasalunkhe2003@gmail.com,WrongPassword123,FAILURE
+notregistered@test.com,AnyPassword123,FAILURE
+,MissingEmailPassword,FAILURE
