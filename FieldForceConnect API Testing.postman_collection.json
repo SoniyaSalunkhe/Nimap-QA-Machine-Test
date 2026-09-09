@@ -1,0 +1,194 @@
+{
+  "info": {
+    "_postman_id": "cb7acfa8-22bc-4ec0-8f4e-70c9ca244b90",
+    "name": "FieldForceConnect API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58069620",
+    "_collection_link": "https://go.postman.co/collection/58069620-cb7acfa8-22bc-4ec0-8f4e-70c9ca244b90?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - Valid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200)); const data = pm.response.json(); pm.test(\"success is true\", () => pm.expect(data.success).to.eql(true)); pm.environment.set(\"userId\", data.userId); pm.environment.set(\"companyId\", data.companyId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"{{username}}\", \"password\": \"{{password}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/account/authenticate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "authenticate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Invalid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r\nconst data = pm.response.json();\r\npm.test(\"success is false\", () => pm.expect(data.success).to.eql(false));\r\npm.test(\"Correct error message\", () => pm.expect(data.errormessage).to.eql(\"Invalid Email Id / Mobile No or Password.\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"username\": \"{{username}}\", \"password\": \"{{invalid_password}}\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/account/authenticate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "authenticate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Add Customer (Lead)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200)); const data = pm.response.json(); pm.test(\"Created successfully\", () => pm.expect(data.Status).to.eql(200)); pm.environment.set(\"leadId\", data.data.Id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{username}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": " { \"LeadId\": 0, \"IsVisibleToAll\": false, \"LeadName\": \"Postman Test Customer {{$timestamp}}\", \"RefNo\": \"\", \"ReferredBy\": 0, \"PersonName\": \"\", \"MobileNo\": \"\", \"ContactNo\": \"\", \"Email\": \"\", \"PersonDesignation\": \"\", \"PersonLocation\": \"\", \"Address\": \"\", \"CountryId\": 0, \"StateId\": 0, \"CityId\": 0, \"LocalityId\": 0, \"PinCode\": \"\", \"LeadSourceId\": 0, \"LeadStageId\": 0, \"TerritoryId\": 0, \"Website\": \"\", \"OtherInfo\": \"\", \"LeadTypeId\": 0, \"ParentLeadId\": 0, \"FrontView\": \"\", \"BackView\": \"\", \"CustomFieldValues\": [], \"LeadTags\": [], \"Longitude\": 0, \"Latitude\": 0, \"LeadContacts\": [] }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/CRM/Lead",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "CRM",
+                "Lead"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get Dashboard Stats",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              " pm.test(\"Status code is 200\", () => pm.response.to.have.status(200)); pm.test(\"Response is valid JSON\", () => pm.response.to.be.json);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{username}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/CRM/Stats",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "CRM",
+            "Stats"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
